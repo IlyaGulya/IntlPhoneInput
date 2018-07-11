@@ -1,5 +1,6 @@
 package net.rimoto.intlphoneinput;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -90,7 +91,7 @@ public class IntlPhoneInput extends RelativeLayout {
         mPhoneEdit = (EditText) findViewById(R.id.intl_phone_edit__phone);
         mPhoneEdit.addTextChangedListener(mPhoneNumberWatcher);
 
-        setDefault();
+        setEmptyDefault();
         setEditTextDefaults(attrs);
     }
 
