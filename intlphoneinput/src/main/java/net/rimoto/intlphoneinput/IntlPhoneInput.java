@@ -257,18 +257,29 @@ public class IntlPhoneInput extends RelativeLayout {
      * @param number E.164 format or national format
      */
     public void setNumber(String number) {
+
         try {
             String iso = null;
             if (mSelectedCountry != null) {
                 iso = mSelectedCountry.getIso();
             }
             Phonenumber.PhoneNumber phoneNumber = mPhoneUtil.parse(number, iso);
-			
-            int countryIdx = mCountries.indexOfIso(mPhoneUtil.getRegionCodeForNumber(phoneNumber));
-			mSelectedCountry = mCountries.get(countryIdx);		
+
+            String regionCodeForNumber = mPhoneUtil.getRegionCodeForNumber(phoneNumber);
+            if(regionCodeForNumber == null) {
+                return;
+            }
+            int countryIdx = mCountries.indexOfIso(regionCodeForNumber);
+
+            if (countryIdx < 0) {
+                return;
+            }
+
+            mSelectedCountry = mCountries.get(countryIdx);
+
             mCountrySpinner.setSelection(countryIdx);
-			
-			
+
+
             mPhoneEdit.setText(mPhoneUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
         } catch (NumberParseException ignored) {
         }
