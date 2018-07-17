@@ -3,9 +3,9 @@
     android:layout_height="match_parent"
     android:padding="5dp"
     style="?android:attr/spinnerDropDownItemStyle"
-    android:maxLines="1"
     android:layout_width="match_parent"
-    android:ellipsize="marquee">
+    android:ellipsize="marquee"
+    android:singleLine="true">
 
     <ImageView
         android:layout_width="25.5dp"
