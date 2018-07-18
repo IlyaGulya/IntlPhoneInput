@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion Sdk.compile
     buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "net.rimoto.intlphoneinput.demo"
-        minSdkVersion 16
-        targetSdkVersion 24
+        minSdkVersion Sdk.min
+        targetSdkVersion Sdk.target
         versionCode 1
         versionName "1.0"
 
@@ -23,11 +23,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':intlphoneinput')
+    implementation Libs.supportAppcompat_v7
+    implementation Libs.supportDesign
+
+    testImplementation Libs.junit
+    androidTestImplementation (Libs.espressoCore, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    testCompile 'junit:junit:4.12'
-    compile project(':intlphoneinput')
 }

@@ -20,11 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.i18n.phonenumbers.NumberParseException;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
-
 import java.util.Locale;
+
+import io.michaelrocks.libphonenumber.android.NumberParseException;
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+import io.michaelrocks.libphonenumber.android.Phonenumber;
 
 public class IntlPhoneInput extends RelativeLayout {
     private final String DEFAULT_COUNTRY = Locale.getDefault().getCountry();
@@ -38,7 +38,7 @@ public class IntlPhoneInput extends RelativeLayout {
     private PhoneNumberWatcher mPhoneNumberWatcher = new PhoneNumberWatcher(DEFAULT_COUNTRY);
 
     //Util
-    private PhoneNumberUtil mPhoneUtil = PhoneNumberUtil.getInstance();
+    private PhoneNumberUtil mPhoneUtil;
 
     // Fields
     private Country mSelectedCountry;
@@ -52,7 +52,7 @@ public class IntlPhoneInput extends RelativeLayout {
      */
     public IntlPhoneInput(Context context) {
         super(context);
-        init(null);
+        init(context,null, 0);
     }
 
     /**
@@ -63,14 +63,26 @@ public class IntlPhoneInput extends RelativeLayout {
      */
     public IntlPhoneInput(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(attrs);
+        init(context, attrs, 0);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param context Context
+     * @param attrs   AttributeSet
+     */
+    public IntlPhoneInput(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr);
     }
 
     /**
      * Init after constructor
      */
-    private void init(AttributeSet attrs) {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         inflate(getContext(), R.layout.intl_phone_input, this);
+        mPhoneUtil = PhoneNumberUtil.createInstance(getContext());
 
         /**+
          * Country spinner

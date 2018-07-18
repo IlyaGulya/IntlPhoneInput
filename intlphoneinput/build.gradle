@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion Sdk.compile
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 25
+        minSdkVersion Sdk.min
+        targetSdkVersion Sdk.target
         versionCode 101
         versionName "1.0.1"
     }
@@ -19,8 +19,8 @@ android {
 }
 
 dependencies {
-    compile 'com.googlecode.libphonenumber:libphonenumber:7.7.2'
-    compile 'com.android.support:appcompat-v7:25.2.0'
+    api Libs.libphonenumberAndroid
+    implementation Libs.supportAppcompat_v7
 }
 
 ext {
