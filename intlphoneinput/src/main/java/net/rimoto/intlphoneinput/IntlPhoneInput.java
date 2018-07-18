@@ -33,6 +33,7 @@ public class IntlPhoneInput extends RelativeLayout {
     // UI Views
     private Spinner mCountrySpinner;
     private EditText mPhoneEdit;
+    private TextView mCountryPrefix;
 
     //Adapters
     private CountrySpinnerAdapter mCountrySpinnerAdapter;
@@ -86,6 +87,8 @@ public class IntlPhoneInput extends RelativeLayout {
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         inflate(getContext(), R.layout.intl_phone_input, this);
         mPhoneUtil = PhoneNumberUtil.createInstance(getContext());
+
+        mCountryPrefix = findViewById(R.id.intl_phone_edit__country_prefix);
 
         /**+
          * Country spinner
@@ -195,8 +198,17 @@ public class IntlPhoneInput extends RelativeLayout {
         }
         if(defaultIdx >= 0) {
             mSelectedCountry = mCountries.get(defaultIdx);
+            updateCountryPrefix();
         }
         mCountrySpinner.setSelection(defaultIdx);
+    }
+
+    private void updateCountryPrefix() {
+        if(mSelectedCountry != null) {
+            mCountryPrefix.setText(getContext().getString(R.string.prefix_placeholder, mSelectedCountry.getDialCode()));
+        } else {
+            mCountryPrefix.setText("");
+        }
     }
 
     /**
@@ -228,6 +240,7 @@ public class IntlPhoneInput extends RelativeLayout {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             mSelectedCountry = mCountrySpinnerAdapter.getItem(position);
+            updateCountryPrefix();
 
             //Make sure that the watcher is added into the listeners of the edittext
             //after updating the country selected...
@@ -317,9 +330,8 @@ public class IntlPhoneInput extends RelativeLayout {
             }
 
             mSelectedCountry = mCountries.get(countryIdx);
-
             mCountrySpinner.setSelection(countryIdx);
-
+            updateCountryPrefix();
 
             mPhoneEdit.setText(mPhoneUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
         } catch (NumberParseException ignored) {

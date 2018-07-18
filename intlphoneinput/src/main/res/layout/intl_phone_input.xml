@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:gravity="center_vertical">
     <android.support.v7.widget.AppCompatSpinner
@@ -9,6 +11,11 @@
         android:id="@+id/intl_phone_edit__country"
         android:dropDownWidth="350dp"
         android:background="@android:color/transparent" />
+    <TextView
+        tools:text="+1441"
+        android:id="@+id/intl_phone_edit__country_prefix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <android.support.v7.widget.AppCompatEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -3,4 +3,5 @@
     <string name="item_image_contentDescription">Country flag</string>
     <string name="item_preview_country">Israel (‫ישראל‬‎)</string>
     <string name="item_preview_dialCode">+972</string>
+    <string name="prefix_placeholder">" +%1$d"</string>
 </resources>
