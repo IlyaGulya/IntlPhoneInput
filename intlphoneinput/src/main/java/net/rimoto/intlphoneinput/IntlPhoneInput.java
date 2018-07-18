@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
@@ -45,6 +46,7 @@ public class IntlPhoneInput extends RelativeLayout {
     private CountriesFetcher.CountryList mCountries;
     private String[] selectedCountryCodes;
     private IntlPhoneInputListener mIntlPhoneInputListener;
+    private HintListener hintListener;
 
     /**
      * Constructor
@@ -212,6 +214,9 @@ public class IntlPhoneInput extends RelativeLayout {
             Phonenumber.PhoneNumber phoneNumber = mPhoneUtil.getExampleNumberForType(mSelectedCountry.getIso(), PhoneNumberUtil.PhoneNumberType.MOBILE);
             if (phoneNumber != null) {
                 mPhoneEdit.setHint(mPhoneUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
+                if(hintListener != null) {
+                    hintListener.onHintChange(mPhoneEdit.getHint());
+                }
             }
         }
     }
@@ -237,6 +242,11 @@ public class IntlPhoneInput extends RelativeLayout {
         public void onNothingSelected(AdapterView<?> parent) {
         }
     };
+
+    @Nullable
+    public CharSequence getHint() {
+        return mPhoneEdit.getHint();
+    }
 
     /**
      * Phone number watcher
@@ -384,6 +394,10 @@ public class IntlPhoneInput extends RelativeLayout {
         mIntlPhoneInputListener = listener;
     }
 
+    public void setHintListener(HintListener listener) {
+        hintListener = listener;
+    }
+
     /**
      * Returns the error message that was set to be displayed with
      * {@link #setError}, or <code>null</code> if no error was set
@@ -422,6 +436,10 @@ public class IntlPhoneInput extends RelativeLayout {
      */
     public interface IntlPhoneInputListener {
         void done(View view, boolean isValid);
+    }
+
+    public interface HintListener {
+        void onHintChange(CharSequence hint);
     }
 
     @Override
