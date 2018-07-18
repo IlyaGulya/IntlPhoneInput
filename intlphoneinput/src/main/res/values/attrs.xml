@@ -11,5 +11,6 @@
         <attr name="selectedCountryCodes" format="reference" />
         <attr name="showRemainingCountries" format="boolean" />
         <attr name="background" format="reference" />
+        <attr name="prefixTextAppearance" format="reference" />
     </declare-styleable>
 </resources>

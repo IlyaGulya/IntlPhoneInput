@@ -159,6 +159,10 @@ public class IntlPhoneInput extends RelativeLayout {
         if(backgroundRes != -1) {
             mPhoneEdit.setBackgroundResource(backgroundRes);
         }
+        int prefixTextAppearanceRes = a.getResourceId(R.styleable.IntlPhoneInput_prefixTextAppearance, -1);
+        if(prefixTextAppearanceRes != -1) {
+            mCountryPrefix.setTextAppearance(mCountryPrefix.getContext(), prefixTextAppearanceRes);
+        }
         a.recycle();
     }
 
