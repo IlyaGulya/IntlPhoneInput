@@ -2,6 +2,8 @@ package net.rimoto.intlphoneinput;
 
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.util.ArrayMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,9 +12,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CountriesFetcher {
-    private static CountryList mCountries;
+    private static CountryList sCountries;
 
     /**
      * Fetch JSON from RAW resource
@@ -37,23 +40,30 @@ public class CountriesFetcher {
         return json;
     }
 
-    /**
-     * Import CountryList from RAW resource
-     *
-     * @param context Context
-     * @return CountryList
-     */
-    public static CountryList getCountries(Context context) {
-        if (mCountries != null) {
-            return mCountries;
+    public static CountryList getCountries(Context context, @Nullable String[] countryCodes, boolean showRemainingCountries) {
+        ArrayMap<String, Country> countryArrayMap = null;
+        List<Country> remainingCountries = null;
+        if(countryCodes != null) {
+            countryArrayMap = new ArrayMap<>();
+            if(showRemainingCountries) {
+                remainingCountries = new ArrayList<>();
+            }
         }
-        mCountries = new CountryList();
+        sCountries = new CountryList();
         try {
             JSONArray countries = new JSONArray(getJsonFromRaw(context, R.raw.countries));
             for (int i = 0; i < countries.length(); i++) {
                 try {
                     JSONObject country = (JSONObject) countries.get(i);
-                    mCountries.add(new Country(country.getString("name"), country.getString("iso2"), country.getInt("dialCode")));
+                    Country countryObj = new Country(country.getString("name"), country.getString("iso2"), country.getInt("dialCode"));
+                    if(countryCodes == null) {
+                        sCountries.add(countryObj);
+                    } else {
+                        countryArrayMap.put(countryObj.getIso(), countryObj);
+                        if(remainingCountries != null) {
+                            remainingCountries.add(countryObj);
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -61,7 +71,23 @@ public class CountriesFetcher {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return mCountries;
+
+        if(countryCodes != null) {
+            for (String countryCode : countryCodes) {
+                Country country = countryArrayMap.get(countryCode);
+                if(country != null) {
+                    sCountries.add(country);
+                    if(remainingCountries != null) {
+                        remainingCountries.remove(country);
+                    }
+                }
+            }
+            if(remainingCountries != null) {
+                sCountries.addAll(remainingCountries);
+            }
+        }
+
+        return sCountries;
     }
 
 

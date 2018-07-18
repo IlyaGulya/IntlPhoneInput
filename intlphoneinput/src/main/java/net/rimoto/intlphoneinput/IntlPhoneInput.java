@@ -43,6 +43,7 @@ public class IntlPhoneInput extends RelativeLayout {
     // Fields
     private Country mSelectedCountry;
     private CountriesFetcher.CountryList mCountries;
+    private String[] selectedCountryCodes;
     private IntlPhoneInputListener mIntlPhoneInputListener;
 
     /**
@@ -91,7 +92,19 @@ public class IntlPhoneInput extends RelativeLayout {
         mCountrySpinnerAdapter = new CountrySpinnerAdapter(getContext());
         mCountrySpinner.setAdapter(mCountrySpinnerAdapter);
 
-        mCountries = CountriesFetcher.getCountries(getContext());
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.IntlPhoneInput, defStyleAttr, 0);
+        boolean showRemainingCountries;
+        try {
+            int selectedCountryCodesIdx = a.getResourceId(R.styleable.IntlPhoneInput_selectedCountryCodes, 0);
+            if(selectedCountryCodesIdx != 0) {
+                selectedCountryCodes = context.getResources().getStringArray(selectedCountryCodesIdx);
+            }
+            showRemainingCountries = a.getBoolean(R.styleable.IntlPhoneInput_showRemainingCountries, false);
+        } finally {
+            a.recycle();
+        }
+
+        mCountries = CountriesFetcher.getCountries(getContext(), selectedCountryCodes, showRemainingCountries);
         mCountrySpinnerAdapter.addAll(mCountries);
         mCountrySpinner.setOnItemSelectedListener(mCountrySpinnerListener);
 
@@ -153,11 +166,11 @@ public class IntlPhoneInput extends RelativeLayout {
     public void setDefault() {
         try {
             TelephonyManager telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-            @SuppressLint("MissingPermission") String phone = telephonyManager.getLine1Number();
+            @SuppressLint({"MissingPermission", "HardwareIds"}) String phone = telephonyManager != null ? telephonyManager.getLine1Number() : "";
             if (phone != null && !phone.isEmpty()) {
                 this.setNumber(phone);
             } else {
-                String iso = telephonyManager.getNetworkCountryIso();
+                String iso =  telephonyManager != null ? telephonyManager.getNetworkCountryIso() : "";
                 setEmptyDefault(iso);
             }
         } catch (SecurityException e) {
@@ -175,7 +188,12 @@ public class IntlPhoneInput extends RelativeLayout {
             iso = DEFAULT_COUNTRY;
         }
         int defaultIdx = mCountries.indexOfIso(iso);
-        mSelectedCountry = mCountries.get(defaultIdx);
+        if(defaultIdx == -1 && mCountries.size() > 0) {
+            defaultIdx = 0;
+        }
+        if(defaultIdx >= 0) {
+            mSelectedCountry = mCountries.get(defaultIdx);
+        }
         mCountrySpinner.setSelection(defaultIdx);
     }
 
