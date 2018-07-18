@@ -9,6 +9,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
+import android.text.InputFilter;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -120,6 +121,7 @@ public class IntlPhoneInput extends RelativeLayout {
          */
         mPhoneEdit = (EditText) findViewById(R.id.intl_phone_edit__phone);
         mPhoneEdit.addTextChangedListener(mPhoneNumberWatcher);
+        mPhoneEdit.setFilters(new InputFilter[] { new PhoneNumberFilter(mPhoneUtil, this) });
 
         setEmptyDefault();
         setEditTextDefaults(attrs);

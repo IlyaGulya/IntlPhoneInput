@@ -22,5 +22,6 @@
         android:id="@+id/intl_phone_edit__phone"
         android:lines="1"
         android:textSize="@dimen/text_size_default"
+        android:digits="0123456789+"
         android:inputType="phone" />
 </LinearLayout>
