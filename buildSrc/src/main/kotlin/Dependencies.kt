@@ -1,7 +1,7 @@
 object Versions {
     const val compileSdk = 27
     const val targetSdk = 21
-    const val minSdk = 21
+    const val minSdk = 17
     const val support_lib = "27.1.1"
     const val constraint_layout = "1.1.0"
     const val junit = "4.12"

@@ -3,7 +3,7 @@ package net.rimoto.intlphoneinput;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.util.ArrayMap;
+import android.support.v4.util.ArrayMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
