@@ -155,6 +155,10 @@ public class IntlPhoneInput extends RelativeLayout {
         if (hintColor != -1) {
             mPhoneEdit.setHintTextColor(color);
         }
+        int backgroundRes = a.getResourceId(R.styleable.IntlPhoneInput_background, -1);
+        if(backgroundRes != -1) {
+            mPhoneEdit.setBackgroundResource(backgroundRes);
+        }
         a.recycle();
     }
 
